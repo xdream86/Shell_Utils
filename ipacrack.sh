@@ -23,6 +23,7 @@ for i in *.ipa; do
     find "$j"  -iname '*.wav' -or -iname '*m4a' -or -iname '*caf' -print0 | xargs -0 -I {} cp -n  {} iparesource/"$j"/audio
     find "$j"  -iname '*.ttf' -or -iname '*otf' -print0 | xargs -0 -I {} cp -n  {} iparesource/"$j"/font
 
+    # https://github.com/G-P-S/cartool    
     cartool iparesource/"$j"/*.car iparesource/"$j"/carpng
 
     # 删除所有除了iparesource目录和.目录以外的所有目录
