@@ -1,5 +1,6 @@
 #! /bin/bash
 
+count=`ls -1 *.ipa  2>/dev/null | wc -l`
 if [ $count == 0 ]; then
     echo "not found .ipa file in current folder"
     exit -1;
@@ -20,10 +21,9 @@ for i in *.ipa; do
 
     find "$j"  -iname '*.car'  -print0 | xargs -0 -I {} cp -n  {} iparesource/"$j"/"$j".car
     find "$j"  -iname '*.png'  -print0 | xargs -0 -I {} cp -n  {} iparesource/"$j"/png
-    find "$j"  -iname '*.wav' -or -iname '*m4a' -or -iname '*caf' -print0 | xargs -0 -I {} cp -n  {} iparesource/"$j"/audio
-    find "$j"  -iname '*.ttf' -or -iname '*otf' -print0 | xargs -0 -I {} cp -n  {} iparesource/"$j"/font
+    find "$j"  \( -iname '*.wav' -or -iname '*m4a' -or -iname '*caf' \) -print0 | xargs -0 -I {} cp -n  {} iparesource/"$j"/audio
+    find "$j"  \( -iname '*.ttf' -or -iname '*otf' \) -print0 | xargs -0 -I {} cp -n  {} iparesource/"$j"/font
 
-    # https://github.com/G-P-S/cartool    
     cartool iparesource/"$j"/*.car iparesource/"$j"/carpng
 
     # 删除所有除了iparesource目录和.目录以外的所有目录
