@@ -18,16 +18,37 @@ for i in *.ipa; do
     mkdir iparesource/"$j"/audio
     mkdir iparesource/"$j"/carpng
     mkdir iparesource/"$j"/font
+    mkdir iparesource/"$j"/mp4
+    mkdir iparesource/"$j"/screenshot
 
     find "$j"  -iname '*.car'  -print0 | xargs -0 -I {} cp -n  {} iparesource/"$j"/"$j".car
     find "$j"  -iname '*.png'  -print0 | xargs -0 -I {} cp -n  {} iparesource/"$j"/png
     find "$j"  \( -iname '*.wav' -or -iname '*m4a' -or -iname '*caf' \) -print0 | xargs -0 -I {} cp -n  {} iparesource/"$j"/audio
     find "$j"  \( -iname '*.ttf' -or -iname '*otf' \) -print0 | xargs -0 -I {} cp -n  {} iparesource/"$j"/font
+    find "$j"  -iname '*.mp4'  -print0 | xargs -0 -I {} cp -n  {} iparesource/"$j"/mp4
 
+    # 抽取carpng图片
     cartool iparesource/"$j"/*.car iparesource/"$j"/carpng
 
-    # 删除所有除了iparesource目录和.目录以外的所有目录
-    find . ! -iname '*.ipa' !  -iname 'iparesource' ! -iname '.' -type d -maxdepth 1 -exec rm -rf {} +
+    #下载screentshot图片
+    appid=`/usr/libexec/PlistBuddy -c "Print :itemId" "$j/iTunesMetadata.plist"`
+
+    curl http://itunes.apple.com/lookup?id=$appid > appinfo.json
+
+    IFS=$'\n'; array=($(cat appinfo.json | jq '.results[0].screenshotUrls[]'))
+
+    arraylength=${#array[@]}
+
+    for (( i=1; i<${arraylength}+1; i++ )); do
+        fileurl=${array[$i-1]}
+        fileurl="${fileurl%\"}"
+        fileurl="${fileurl#\"}"
+        extension="${fileurl##*.}"
+
+        wget $fileurl -O iparesource/"$j"/screenshot/$i.$extension
+    done
+
+    rm -rf "$j" appinfo.json
 done
 
 exit 0
