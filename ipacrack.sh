@@ -27,7 +27,7 @@ for i in *.ipa; do
     find "$j"  \( -iname '*.ttf' -or -iname '*otf' \) -print0 | xargs -0 -I {} cp -n  {} iparesource/"$j"/font
     find "$j"  -iname '*.mp4'  -print0 | xargs -0 -I {} cp -n  {} iparesource/"$j"/mp4
 
-    # 抽取carpng图片
+    # 抽取carpng图片 cartool:https://github.com/G-P-S/cartool
     cartool iparesource/"$j"/*.car iparesource/"$j"/carpng
 
     #下载screentshot图片
