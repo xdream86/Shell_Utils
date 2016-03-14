@@ -3,6 +3,6 @@
 
 使用之前需要安装cartool,地址:https://github.com/G-P-S/cartool
 
-演示：
+演示：(这里有一张演示用的8M大小的gif图片，正在加载中...)
 
-![stack Overflow](./demonstration.gif)
+![gif](./demonstration.gif)
